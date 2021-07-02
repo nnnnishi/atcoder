@@ -1,0 +1,7 @@
+N, M = list(map(int, input().split()))
+A = set(list(map(int, input().split())))
+B = set(list(map(int, input().split())))
+a = list(A.symmetric_difference(B))
+a.sort()
+a = list(map(str, a))
+print(" ".join(a))
