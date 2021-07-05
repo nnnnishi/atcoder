@@ -1,4 +1,3 @@
-# GCDは結合則が成り立ちどこから計算しても変わらない
 # abc125_c: https://img.atcoder.jp/abc125/editorial.pdf
 # code: https://qiita.com/derodero24/items/91b6468e66923a87f39f
 
