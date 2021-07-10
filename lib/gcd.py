@@ -2,7 +2,7 @@
 # GCDは結合則,交換則が成り立ちどこから計算しても変わらない
 # code: https://note.nkmk.me/python-gcd-lcm/
 # python 3.9からはmath.gcdで複数もいける
-
+# O(log max(a,b))
 import math
 from functools import reduce
 
