@@ -1,14 +1,3 @@
-# 再帰用
-import sys
-
-sys.setrecursionlimit(1000000)
-
-# itertools
-import itertools
-for x,y in itertools.product(range(101),repeat = 2):
-
-
-
 # ワーシャルフロイド
 for k in range(N):
     for i in range(N):
@@ -64,61 +53,8 @@ def dykstra(y, x):
     return dist
 
 
-from functools import lru_cache
-import sys
-
-sys.setrecursionlimit(1000000)
-@lru_cache(maxsize=None)
-def fib(n):
-    if n < 2:
-        return n
-    return fib(n - 1) + fib(n - 2)
-
-
-
 # 座標圧縮
 def compress(arr):
-    *XS, = set(arr)
+    (*XS,) = set(arr)
     XS.sort()
     return {e: i for i, e in enumerate(XS)}
-
-
-
-
-# ベルマンフォード
-# O(EV)
-def bellman_ford(s):
-    d = [float("inf")] * V  # 各頂点への最小コスト
-    d[s] = 0  # 自身への距離は0
-    for i in range(V):
-        update = False  # 更新が行われたか
-        # すべての辺をたどる
-        for s, e, c in G:
-            if d[e] > d[s] + c:
-                d[e] = d[s] + c
-                update = True
-        if not update:
-            break
-        # V-1回以上更新できる場合は負閉路が存在
-        if i == V - 1:
-            exit(print("inf"))
-    return d
-
-
-V, M = [int(_) for _ in input().split()]
-G = []
-for _ in range(M):
-    s, e, c = [int(x) for x in input().split()]  # 始点,終点,コスト
-    # 0はじまりにする
-    s -= 1
-    e -= 1
-    G.append([s, e, c])
-    # g.append([e, s, c])  # 無向グラフは逆側もいれる
-print(bellman_ford(0))
-
-# 四捨五入
-def my_round(val, digit=0):
-    p = 10 ** digit
-    return (val * p * 2 + 1) // 2 / p
-
-Dis = my_round(Dis / 60, 1)
