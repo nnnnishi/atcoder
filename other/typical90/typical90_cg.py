@@ -14,5 +14,17 @@ def make_divisors(N):
     return div
 
 
-print(make_divisors(10 ** 8))
-print(len(make_divisors(10 ** 8)))
+K = int(input())
+d = make_divisors(K)
+D = len(d)
+ans = 0
+for i in range(D):
+    if i ** 2 > K:
+        break
+    for j in range(i, D):
+        if K / (d[i] * d[j]) < d[j]:
+            break
+        if K % (d[i] * d[j]) == 0:
+            # print(d[i], d[j], K // (d[i] * d[j]))
+            ans += 1
+print(ans)

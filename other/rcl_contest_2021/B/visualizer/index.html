@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>visualizer - マッサージチェア2021</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+
+<body>
+    <div class="ui menu">
+        <div class="item">
+            <h1>visualizer - マッサージチェア2021</h1>
+        </div>
+        <div class="right item">
+            <a href="https://github.com/recruit-communications/rcl-contest-2020/tree/master/qual_B/visualizer"><i class="code icon"></i>source</a>
+        </div>
+    </div>
+
+        <div class="ui container center aligned">
+        <div class="ui form">
+            <div class="inline fields">
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label">
+                            input file
+                        </div>
+                        <input id="inputFile" type="file" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label">
+                            output file
+                        </div>
+                        <input id="outputFile" type="file" />
+                    </div>
+                </div>
+                <div class="field">
+                    <button id="reloadButton" class="ui primary button disabled"><i class="sync icon"></i> reload</button>
+                </div>
+            </div>
+
+            <div class="inline fields">
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label teal">
+                            score
+                        </div>
+                        <input id="scoreInput" type="text" readonly />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <canvas id="canvas" style="border: black solid 1px; margin-left: 1px;" height="800" width="800"></canvas>
+        </div>
+
+        <div class="ui form">
+            <div class="inline fields">
+                <div class="field">
+                    <span id="saveAsImage" class="ui button"><i class="download icon"></i>save as image</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript" src="main.js"></script></body>
+</html>
