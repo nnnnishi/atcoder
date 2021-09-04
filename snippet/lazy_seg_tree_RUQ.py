@@ -1,3 +1,4 @@
+# https://qiita.com/takayg1/items/c811bd07c21923d7ec69
 def segfunc(x, y):
     return max(x, y)
 
