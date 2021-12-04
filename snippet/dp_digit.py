@@ -1,4 +1,5 @@
 # https://atcoder.jp/contests/tdpc/tasks/tdpc_number
+# 解説：https://algo-logic.info/digit-dp/
 # 類題：https://atcoder.jp/contests/abc029/tasks/abc029_d
 D = int(input())
 N = input()
