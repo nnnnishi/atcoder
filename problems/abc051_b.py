@@ -1,0 +1,8 @@
+K, S = [int(_) for _ in input().split()]
+ans = 0
+for x in range(K + 1):
+    for y in range(K + 1):
+        z = S - x - y
+        if 0 <= z <= K:
+            ans += 1
+print(ans)
