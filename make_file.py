@@ -1,7 +1,7 @@
-dirstr = "/Users/nnnnishi/codes/atcoder/problems"
-contest_num = "224_"
+dirstr = "/Users/nnnnishi/codes/atcoder/recent_problems"
+contest_num = "228_"
 # for char in ["a", "b", "c"]:
-for char in ["a", "b", "c", "d", "e", "f"]:
+for char in ["a", "b", "c", "d", "e"]:
     with open(f"{dirstr}/abc{contest_num}{char}.py", "w") as writer:
         writer.write("N = int(input())\n")
         writer.write("N = list(map(int, input().split()))\n")

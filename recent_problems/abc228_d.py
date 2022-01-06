@@ -6,11 +6,9 @@ class UnionFind:
     def __init__(self, n):
         self.n = n
         self.parents = [-1] * n
+        self.val = [-1] * n
 
     def find(self, x):
-        """
-        経路圧縮
-        """
         if self.parents[x] < 0:
             return x
         else:
@@ -18,18 +16,11 @@ class UnionFind:
             return self.parents[x]
 
     def union(self, x, y):
-        """
-        union by size込み、sizeからrankにしたりなくしたりしてもよい
-        """
         x = self.find(x)
         y = self.find(y)
 
         if x == y:
             return
-
-        # Sizeの大きい方につける
-        if self.parents[x] > self.parents[y]:
-            x, y = y, x
 
         self.parents[x] += self.parents[y]
         self.parents[y] = x
@@ -60,15 +51,18 @@ class UnionFind:
         return "\n".join(f"{r}: {m}" for r, m in self.all_group_members().items())
 
 
-N, Q = [int(_) for _ in input().split()]
+Q = int(input())
+N = 2 ** 20
 uf = UnionFind(N)
 
 for i in range(Q):
-    p, a, b = [int(_) for _ in input().split()]
-    if p == 0:
-        uf.union(a, b)
+    t, x = [int(_) for _ in input().split()]
+    if t == 1:
+        idx = x % N
+        idx = uf.find(idx)
+        uf.val[idx] = x
+        uf.union((idx + 1) % N, idx)
     else:
-        if uf.same(a, b):
-            print("Yes")
-        else:
-            print("No")
+        idx = x % N
+        print(uf.val[idx])
+
