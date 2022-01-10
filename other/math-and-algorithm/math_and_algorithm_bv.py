@@ -1,0 +1,46 @@
+# O(k^3 logN) -> きたまさ法を使うと早くなる
+# https://atcoder.jp/contests/math-and-algorithm/tasks/math_and_algorithm_av
+from copy import deepcopy
+
+# 2×2 行列 A, B の積を返す関数
+def multiply(A, B):
+    C = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                C[i][j] += A[i][k] * B[k][j]
+    return C
+
+
+def power(A, n):
+    """
+    A の n 乗を返す関数
+    """
+    P = deepcopy(A)
+    Q = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    flag = False
+    # bit全探索で繰り返し2乗法のものを何回かけるかを決定
+    for i in range(60):
+        if (n & (1 << i)) != 0:
+            if flag == False:
+                # Qが0行列でなくするため一回目はdeepcopy
+                Q = deepcopy(P)
+                flag = True
+            else:
+                Q = deepcopy(multiply(Q, P))
+        P = deepcopy(multiply(P, P))
+    return Q
+
+
+# 入力 → 累乗の計算（N が 2 以上でなければ正しく動作しないので注意）
+Q = int(input())
+for _ in range(Q):
+    X, Y, Z, T = [float(_) for _ in input().split()]
+    A = [[1 - X, Y, 0], [0, 1 - Y, Z], [X, 0, 1 - Z]]
+    B = power(A, int(T))
+
+    # 答えの計算 → 出力（下から 9 桁目が 0 の場合、最初に 0 を含まない形で出力していることに注意）
+    ans1 = B[0][0] + B[0][1] + B[0][2]
+    ans2 = B[1][0] + B[1][1] + B[1][2]
+    ans3 = B[2][0] + B[2][1] + B[2][2]
+    print(ans1, ans2, ans3)

@@ -17,6 +17,7 @@ def binomial_coefficients(n, k):
         ans *= n - i
         ans *= modinv_table[i + 1]
         ans %= mod
+        print(ans)
     return ans
 
 
