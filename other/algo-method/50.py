@@ -4,6 +4,7 @@ sumA = sum(A)
 if M > sumA:
     exit(print("No"))
 
+# dp[桁][合計]=  パターン数
 dp = [[0] * (sumA + 1) for _ in range(N + 1)]
 dp[0][0] = 1
 
