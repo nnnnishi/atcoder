@@ -6,8 +6,6 @@ from itertools import accumulate, product, permutations, combinations
 from functools import lru_cache
 import sys
 
-sys.setrecursionlimit(1000000)
-
 
 N = int(input())
 A = [int(_) for _ in input().split()]

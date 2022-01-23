@@ -11,6 +11,6 @@ for n in range(N - 1):
                 dp[n + 1][i + A[n]] = 1
 
 # sumAの半分から探索
-print(dp)
+# print(dp)
 print(sum(dp[N - 1]))
 

@@ -7,7 +7,7 @@ for n in range(N):
         if dp[n][i] >= 1:
             dp[n + 1][i] += dp[n][i]
             dp[n + 1][(i + X[n]) % A] += dp[n][i]
-print(dp)
+# print(dp)
 if dp[N][B] > 0:
     print("Yes")
 else:

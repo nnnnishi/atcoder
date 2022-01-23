@@ -17,6 +17,6 @@ for i in range(N):
                 dp[i][j] += min(dp[i][j + 1], dp[i - 1][j]) + A[i][j]
             else:
                 dp[i][j] += dp[i - 1][j] + A[i][j]
-print(dp)
+
 print(dp[N - 1][0])
 
