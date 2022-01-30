@@ -172,13 +172,18 @@ class SortedSet(Generic[T]):
         return ans
 
 
-N, K = [int(_) for _ in input().split()]
-P = [int(_) for _ in input().split()]
+L, Q = [int(_) for _ in input().split()]
 # SortedSetをつくる、ソートされてればO(N),そうでなければO(NlogN)
-A = SortedSet(P[: K - 1])
-k = K
-for p in P[K - 1 :]:
-    A.add(p)
-    print(A[k - K])
-    k += 1
+A = SortedSet([0, L])
+for _ in range(Q):
+    c, x = [int(_) for _ in input().split()]
+    if c == 1:
+        # x が s に含まれていなければ x を追加し、True を返す
+        # O(√N) amotized / O(N) worst
+        A.add(x)
+    else:
+        # s.lt(x) / s.le(x) / s.gt(x) / s.ge(x)
+        # x より小さい / 以下 / より大きい / 以上で 最小 / 最大 の要素を返す、存在しなければNone
+        # O(√N)
+        print(A.gt(x) - A.lt(x))
 

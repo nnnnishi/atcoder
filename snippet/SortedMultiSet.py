@@ -1,37 +1,13 @@
-"""
-# https://github.com/tatyam-prime/SortedSet/blob/main/SortedMultiset.py
+# https://github.com/tatyam-prime/SortedSet/blob/main/SortedSet.py
 # https://qiita.com/tatyam/items/492c70ac4c955c055602
-# https://atcoder.jp/contests/abc217/tasks/abc217_d
-usage
-- SortedSet(a=[])
-iterable から SortedSet を作ります。重複がなく、かつソートされていれば O(N) 、そうでなければ O(N log N) です。
-- s.a
-SortedSet の中身です。list の list になっていて、中には要素が昇順に並んでいます。各バケットには要素が存在することが保証されます。
-- len(s)
-O(1)
-- x in s / x not in s
-O(√N)
-- s.add(x)
-x が s に含まれていなければ x を追加し、True を返します。O(√N) amotized / O(N) worst
-- s.discard(x)
-x が s に含まれていれば x を削除し、True を返します。O(√N) amotized / O(N) worst
-- s.lt(x) / s.le(x) / s.gt(x) / s.ge(x)
-x より小さい / 以下 / より大きい / 以上で 最小 / 最大 の要素を返します。存在しなければ None をを返します。O(√N)
-- s[x]
-下から x 番目 / 上から ~x 番目 の要素を返します。存在しない場合は IndexError を返します。O(√N) (定数倍が小さい)
-- s.index(x)
-x より小さい要素の数を返します。x が s に含まれている場合は list(s).index(x) に相当します。O(√N) (定数倍が小さい)
-- s.index_right(x)
-x 以下の要素の数を返します。O(√N) (定数倍が小さい)
-"""
 import math
-from bisect import bisect_left, bisect_right
+from bisect import bisect_left, bisect_right, insort
 from typing import Generic, Iterable, Iterator, TypeVar, Union, List
 
 T = TypeVar("T")
 
 
-class SortedSet(Generic[T]):
+class SortedMultiset(Generic[T]):
     BUCKET_RATIO = 50
     REBUILD_RATIO = 170
 
@@ -47,10 +23,10 @@ class SortedSet(Generic[T]):
         ]
 
     def __init__(self, a: Iterable[T] = []) -> None:
-        "Make a new SortedSet from iterable. / O(N) if sorted and unique / O(N log N)"
+        "Make a new SortedMultiset from iterable. / O(N) if sorted / O(N log N)"
         a = list(a)
-        if not all(a[i] < a[i + 1] for i in range(len(a) - 1)):
-            a = sorted(set(a))
+        if not all(a[i] <= a[i + 1] for i in range(len(a) - 1)):
+            a = sorted(a)
         self._build(a)
 
     def __iter__(self) -> Iterator[T]:
@@ -67,7 +43,7 @@ class SortedSet(Generic[T]):
         return self.size
 
     def __repr__(self) -> str:
-        return "SortedSet" + str(self.a)
+        return "SortedMultiset" + str(self.a)
 
     def __str__(self) -> str:
         s = str(list(self))
@@ -87,21 +63,21 @@ class SortedSet(Generic[T]):
         i = bisect_left(a, x)
         return i != len(a) and a[i] == x
 
-    def add(self, x: T) -> bool:
-        "Add an element and return True if added. / O(√N)"
+    def count(self, x: T) -> int:
+        "Count the number of x."
+        return self.index_right(x) - self.index(x)
+
+    def add(self, x: T) -> None:
+        "Add an element. / O(√N)"
         if self.size == 0:
             self.a = [[x]]
             self.size = 1
-            return True
+            return
         a = self._find_bucket(x)
-        i = bisect_left(a, x)
-        if i != len(a) and a[i] == x:
-            return False
-        a.insert(i, x)
+        insort(a, x)
         self.size += 1
         if len(a) > len(self.a) * self.REBUILD_RATIO:
             self._build()
-        return True
 
     def discard(self, x: T) -> bool:
         "Remove an element and return True if removed. / O(√N)"
@@ -170,15 +146,3 @@ class SortedSet(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
-
-
-N, K = [int(_) for _ in input().split()]
-P = [int(_) for _ in input().split()]
-# SortedSetをつくる、ソートされてればO(N),そうでなければO(NlogN)
-A = SortedSet(P[: K - 1])
-k = K
-for p in P[K - 1 :]:
-    A.add(p)
-    print(A[k - K])
-    k += 1
-
