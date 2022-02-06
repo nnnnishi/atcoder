@@ -11,7 +11,9 @@
 N = int(input())
 prv = [None] * N
 G = [None] * N
+
 for v in range(N):
+    # 節点 v の子の数 k,
     k, *G[v] = [int(_) for _ in input().split()]
     for c in G[v]:
         prv[c] = v
