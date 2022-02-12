@@ -8,6 +8,29 @@ import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(1000000)
 
+# Nが大きい
+def cmb(n, r):
+    if n - r < r:
+        r = n - r
+    if r == 0:
+        return 1
+    if r == 1:
+        return n
+    numerator = [n - r + k + 1 for k in range(r)]
+    denominator = [k + 1 for k in range(r)]
+    for p in range(2, r + 1):
+        pivot = denominator[p - 1]
+        if pivot > 1:
+            offset = (n - r) % p
+            for k in range(p - 1, r, p):
+                numerator[k - offset] /= pivot
+                denominator[k] /= pivot
+    result = 1
+    for k in range(r):
+        if numerator[k] > 1:
+            result *= int(numerator[k])
+    return result
+
 
 def scc(N, G, RG):
     """
@@ -81,16 +104,13 @@ for _ in range(M):
     G[a - 1].append(b - 1)
     RG[b - 1].append(a - 1)
 
-# label: ラベル数, group: 各頂点のラベル番号のリスト)
 label, group = scc(N, G, RG)
 
-# G0: labelと隣接するlabelの集合, GP: labelに含まれる点のリスト
 G0, GP = construct(N, G, label, group)
 # この問題ではG0はつかわず、GP(あるラベルに含まれる点のリスト)だけつかう
 ans = 0
 for i in range(label):
     if len(GP[i]) >= 2:
-        # len(GP[i])から2つえらぶ
-        ans += len(GP[i]) * (len(GP[i]) - 1) // 2
+        ans += cmb(len(GP[i]), 2)
 print(ans)
 

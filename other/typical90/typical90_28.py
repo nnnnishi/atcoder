@@ -9,7 +9,7 @@ N = int(input())
 maxX = 1000
 maxY = 1000
 A = [[0] * (maxX + 1) for _ in range(maxY + 1)]
-for _ in range(N):
+for i in range(N):
     lx, ly, rx, ry = [int(_) for _ in input().split()]
     A[ly][lx] += 1
     A[ry][rx] += 1
