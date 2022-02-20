@@ -1,22 +1,36 @@
+# RMQ_RUQ: 最小値などを求める、値を更新する
+# (RMQ_RAQ: 最小値などを求める、値を加算する は別コード)
+# https://smijake3.hatenablog.com/entry/2018/11/03/100133#%E3%82%B3%E3%83%BC%E3%83%89%E5%AE%9F%E8%A3%85-RMQ-and-RUQ
 # https://qiita.com/takayg1/items/c811bd07c21923d7ec69
 def segfunc(x, y):
     return max(x, y)
 
 
-class LazySegTree_RUQ:
+ide_ele = 0
+
+
+class LazySegTree:
     def __init__(self, init_val, segfunc, ide_ele):
         n = len(init_val)
         self.segfunc = segfunc
         self.ide_ele = ide_ele
         self.num = 1 << (n - 1).bit_length()
         self.tree = [ide_ele] * 2 * self.num
+        # 遅延用の配列ももっておくところだけsegtreeと違う
         self.lazy = [None] * 2 * self.num
+        # *** segtreeとおなじ ***
+        # 配列の値を葉にセット
         for i in range(n):
+            # 葉の部分を初期値でうめる
             self.tree[self.num + i] = init_val[i]
+        # 葉よりうえの木をうめてく
         for i in range(self.num - 1, 0, -1):
             self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
 
     def gindex(self, l, r):
+        """
+        伝播される区間のindexを下から上に全列挙
+        """
         l += self.num
         r += self.num
         lm = l >> (l & -l).bit_length()
@@ -33,21 +47,30 @@ class LazySegTree_RUQ:
             l >>= 1
 
     def propagates(self, *ids):
+        """
+        逆順にして上から下にidxを処理、Range Update Query用の伝播処理
+        """
         for i in reversed(ids):
             v = self.lazy[i]
             if v is None:
                 continue
             self.lazy[i] = None
+            # 子にvをわたす
             self.lazy[2 * i] = v
             self.lazy[2 * i + 1] = v
             self.tree[2 * i] = v
             self.tree[2 * i + 1] = v
 
     def update(self, l, r, x):
+        """
+        [l,r)でxを適用する区間更新: Range Update Query
+        """
         ids = self.gindex(l, r)
+        # 伝播される区間のindexについて上から下に遅延配列の値を処理
         self.propagates(*self.gindex(l, r))
         l += self.num
         r += self.num
+        # 区間 [l,r)でdataとlazyをそれぞれ更新
         while l < r:
             if l & 1:
                 self.lazy[l] = x
@@ -58,15 +81,26 @@ class LazySegTree_RUQ:
                 self.tree[r - 1] = x
             r >>= 1
             l >>= 1
+        # 伝播させた区間からはじめて下から上に処理
         for i in ids:
             self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
 
     def query(self, l, r):
-        ids = self.gindex(l, r)
+        """
+        [l,r)でsegfuncに相当するものを探索: Range Minimum Query
+        """
+        # ids = self.gindex(l, r)
+        # 伝播される区間のindexについて上から下に遅延配列の値を処理
         self.propagates(*self.gindex(l, r))
+        # 探索
+        # 一致していたらその葉の値を返す
+        if l == r:
+            return self.tree[self.num + l]
+        # 返却値の初期値を取得
         res = self.ide_ele
         l += self.num
         r += self.num
+        # segfuncと同じ
         while l < r:
             if l & 1:
                 res = self.segfunc(res, self.tree[l])
@@ -79,10 +113,12 @@ class LazySegTree_RUQ:
 
 
 W, N = [int(_) for _ in input().split()]
-st = LazySegTree_RUQ([0] * W, segfunc, -float("inf"))
-for i in range(N):
+st = LazySegTree([0] * W, segfunc, ide_ele)
+for _ in range(N):
     l, r = [int(_) for _ in input().split()]
+    l -= 1
+    r -= 1
     # 右開区間なのでrは+1
-    m = st.query(l - 1, r)
+    m = st.query(l, r + 1)
     print(m + 1)
-    st.update(l - 1, r, m + 1)
+    st.update(l, r + 1, m + 1)

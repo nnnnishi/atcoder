@@ -1,27 +1,21 @@
 S = list(input())
 T = list(input())
-lt = len(T)
-ls = len(S)
-ans = ""
-for i in range(ls - lt, -1, -1):
-    cnt = 0
-    ok = True
-    for j in range(lt):
-        # print(S[i + cnt], T[j])
-        if S[i + cnt] != "?" and S[i + cnt] != T[j]:
+no = "UNRESTORABLE"
+if len(T) > len(S):
+    print(no)
+    exit()
+
+for s in range(len(S) - len(T), -1, -1):
+    for t in range(len(T)):
+        ok = True
+        if S[s + t] == "?" or S[s + t] == T[t]:
+            continue
+        else:
             ok = False
-        cnt += 1
+            break
     if ok:
-        # print(i, "i")
-        cnt = 0
-        for i2 in range(ls):
-            if i2 < i or i2 > i + lt - 1:
-                if S[i2] != "?":
-                    ans += S[i2]
-                else:
-                    ans += "a"
-            else:
-                ans += T[cnt]
-                cnt += 1
-        exit(print(ans))
-print("UNRESTORABLE")
+        for t in range(len(T)):
+            S[s + t] = T[t]
+        print("".join(S).replace("?", "a"))
+        exit()
+print(no)

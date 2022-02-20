@@ -1,8 +1,8 @@
-# 転倒数（バブルソート）
+# Binary Index Tree
 
-# https://atcoder.jp/contests/agc034/tasks/agc034_b
-# https://atcoder.jp/contests/chokudai_S001/tasks/chokudai_S001_j
+# https://onlinejudge.u-aizu.ac.jp/courses/library/3/DSL/all/DSL_2_B
 # https://hcpc-hokudai.github.io/archive/structure_binary_indexed_tree_001.pdf
+# https://juppy.hatenablog.com/entry/2018/11/17/%E8%9F%BB%E6%9C%AC_python_Binary_Indexed_Tree_%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0
 
 
 class BinaryIndexedTree:
@@ -49,7 +49,9 @@ class BinaryIndexedTree:
 
     # 変数を0-1にしておくと指定された要素が何番目に小さいかがわかる
     def lower_left(self, total):
-        """Return min-index satisfying {sum(A0 ~ Ai) >= total}
+        """
+        A0~Aiの範囲の合計がtotal以上となる最小のiを返す
+        Return min-index satisfying {sum(A0 ~ Ai) >= total}
         only if Ai >= 0 (for all i)
         """
         if total < 0:
@@ -64,13 +66,13 @@ class BinaryIndexedTree:
         return pos
 
 
-N = int(input())
-a = [int(_) for _ in input().split()]
+N, Q = [int(_) for _ in input().split()]
 
 # 要素の最大値+1を()内に入れておけば十分,空で生成すると10**6の初期化リストができる
-bit = BinaryIndexedTree()
-ans = 0
-for i, a in enumerate(a):
-    ans += i - bit.running_total(a)
-    bit.add(a, 1)
-print(ans)
+bit = BinaryIndexedTree(N + 1)
+for _ in range(Q):
+    com, x, y = [int(_) for _ in input().split()]
+    if com == 0:
+        bit.add(x - 1, y)
+    else:
+        print(bit.sumrange(x - 1, y - 1))
