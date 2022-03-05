@@ -11,8 +11,8 @@ for n in range(2, N + 1):
             is_prime[check] = False
             check += n
 
-ans = []
+p = []
 for i, x in enumerate(is_prime):
     if x:
-        ans.append(i)
-print(*ans)
+        p.append(i)
+print(*p)

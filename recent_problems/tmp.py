@@ -34,25 +34,32 @@ class LazyBinaryIndexTree:
 
     def sum(self, l, r):
         """ 区間[l,r)の和を取得 """
+
         return (
             self._sum(self.lazy, r - 1) * (r - 1)
             + self._sum(self.tree, r - 1)
             - self._sum(self.lazy, l - 1) * (l - 1)
             - self._sum(self.tree, l - 1)
-        )
+        ) % 998244353
 
 
-N, Q = [int(_) for _ in input().split()]
+N, K = [int(_) for _ in input().split()]
+query = []
+for _ in range(K):
+    query.append([int(_) for _ in input().split()])
+
 # 要素の最大値を()内に入れておけば十分
-# 0はだめで、1はじまり、N+1まで
 bit = LazyBinaryIndexTree(N)
-ans = []
-for _ in range(Q):
-    q, *com = [int(_) for _ in input().split()]
-    if q == 0:
-        s, t, x = com
-        bit.add(s, t + 1, x)
-    else:
-        s, t = com
-        ans.append(bit.sum(s, t + 1))
-print(*ans, sep="\n")
+bit.add(1, 2, 1)
+for i in range(1, N + 1):
+    # 値を取得
+    x = bit.sum(i, i + 1)
+    for l, r in query:
+        if i + l <= N + 1:
+            if i + r <= N + 1:
+                bit.add(i + l, i + r + 1, x)
+            else:
+                bit.add(i + l, N + 1, x)
+
+print(bit.sum(N, N + 1))
+

@@ -1,3 +1,9 @@
+# 範囲を考慮したDP：RMQを利用する
+import sys
+
+input = sys.stdin.readline
+
+
 # https://qiita.com/takayg1/items/c811bd07c21923d7ec69
 # https://atcoder.jp/contests/abc185/tasks/abc185_f
 # セグメント木の解説
@@ -8,7 +14,7 @@ def segfunc(x, y):
 
 
 #####ide_ele 初期値#####
-ide_ele = 0
+ide_ele = -1
 
 
 class SegTree:
@@ -87,17 +93,26 @@ class SegTree:
         return res
 
 
-N, Q = [int(_) for _ in input().split()]
-A = [ide_ele] * N
-st = SegTree(A, segfunc, ide_ele)
-for _ in range(Q):
-    c, x, y = [int(_) for _ in input().split()]
-    if c == 0:
-        # iは0-index
-        i, val = x, y
-        st.update(i, val)
-    else:
-        l, r = x, y
-        # iは0-index,右端開区間なので+1まで
-        m = st.query(l, r + 1)
-        print(m)
+W, N = [int(_) for _ in input().split()]
+A = [-1] * (W + 1)
+A[0] = 0
+cpA = A.copy()
+for _ in range(N):
+    l, r, v = [int(_) for _ in input().split()]
+    st = SegTree(cpA, segfunc, ide_ele)
+    for i in range(W + 1):
+        L = i - r
+        R = i - l
+        if 0 <= R and L <= W:
+            if R >= W:
+                R = W
+            if L <= 0:
+                L = 0
+            # 範囲をみて0以上の最大値をとる
+            max_v = st.query(L, R + 1)
+            # print(L, R, max_v)
+            if max_v >= 0:
+                cpA[i] = max(A[i], v + max_v)
+    A = cpA.copy()
+print(A[W])
+
