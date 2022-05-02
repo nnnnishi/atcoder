@@ -47,6 +47,7 @@ for bit in range(1 << n):
             continue
         # bitの補集合をs0として、s0の部分集合sを列挙してdpを更新する
         s0 = s = mask ^ bit
+        # s-1とs0の&をとったものを並べると補集合を列挙できる
         while s:
             chmin(bit | s, i + 1, max(pre, max_dist[s]))
             s = (s - 1) & s0
