@@ -29,6 +29,7 @@ while Q:
             if di == dj:
                 if dist[yj][xj][dj] > c:
                     dist[yj][xj][dj] = c
+                    # 距離0は左から処理する
                     Q.appendleft((yj, xj, dj))
             else:
                 if dist[yj][xj][dj] > c + 1:

@@ -1,4 +1,8 @@
-# なんどもcombinationを計算するときにO(1)にする
+N = int(input())
+MOD = 10 ** 9 + 7
+# nの最大値
+LIMIT = 200000
+
 # https://atcoder.jp/contests/math-and-algorithm/tasks/math_and_algorithm_bi
 # https://github.com/E869120/math-algorithm-book/blob/main/codes/python/Code_5_07_2.py
 
@@ -26,25 +30,19 @@ def ncr(n, r):
     return division(fact[n], fact[r] * fact[n - r] % MOD, MOD)
 
 
-MOD = 1000000007
-# nの最大値
-LIMIT = 200000
-
 # 配列 fact の初期化（fact[i] は i の階乗を 1000000007 で割った余り）
 fact = [None] * (LIMIT + 1)
 fact[0] = 1
 for i in range(1, LIMIT + 1):
     fact[i] = fact[i - 1] * i % MOD
 
-# 入力
-N = int(input())
-A = list(map(int, input().split()))
-
-# 答えを求める
-answer = 0
-for i in range(N):
-    answer += A[i] * ncr(N - 1, i)
-    answer %= MOD
-
-# 答えの出力
-print(answer)
+for k in range(1, N + 1):
+    ans = 0
+    # 平均O(logN)程度
+    for i in range(1, N // k + 2):
+        s1 = N - (k - 1) * (i - 1)
+        s2 = i
+        # print(s1, s2, ncr(s1, s2))
+        ans += ncr(s1, s2)
+        ans %= MOD
+    print(ans)

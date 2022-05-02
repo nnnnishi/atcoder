@@ -1,4 +1,4 @@
-# O(log(N))で追加取り出し, heapfyはnlogn
+# O(log(N))で追加取り出し, heapifyはO(NlogN)
 # https://atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_c
 from heapq import heappush, heappop, heappushpop, heapify, heapreplace, merge
 

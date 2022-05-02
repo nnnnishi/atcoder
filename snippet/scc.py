@@ -1,18 +1,21 @@
 # 強連結成分分解(Strongly Connected Components: SCC): グラフGに対するSCCを行う
 # https://manabitimes.jp/math/1250
+# https://tjkendev.github.io/procon-library/python/graph/scc.html
 # https://atcoder.jp/contests/typical90/tasks/typical90_u
 # https://github.com/E869120/kyopro_educational_90/blob/main/editorial/021.jpg
 
 import sys
 
 input = sys.stdin.readline
+# 小さいとRE
+# dfsベースなので長いとpypyよりpythonのほうがはやい
 sys.setrecursionlimit(1000000)
 
 
 def scc(N, G, RG):
     """
     入力: <N>: 頂点サイズ, <G>: 順方向の有向グラフ, <RG>: 逆方向の有向グラフ
-    出力: (label: <ラベル数>, group <各頂点のラベル番号のリスト>)
+    出力: (n_label: <ラベル数>, group <各頂点のラベル番号のリスト>)
     """
     order = []
     group = [None] * N
@@ -26,13 +29,13 @@ def scc(N, G, RG):
         # でてきたときにsを足す（帰りがけ順）
         order.append(s)
 
-    def rdfs(s, label):
-        group[s] = label
+    def rdfs(s, n_label):
+        group[s] = n_label
         used[s] = 1
         # 逆方向の有向グラフ
         for t in RG[s]:
             if not used[t]:
-                rdfs(t, label)
+                rdfs(t, n_label)
 
     used = [0] * N
     for i in range(N):
@@ -41,26 +44,26 @@ def scc(N, G, RG):
             dfs(i)
 
     used = [0] * N
-    label = 0
+    n_label = 0
     # 帰りがけ順の逆からたどる
     for s in reversed(order):
         if not used[s]:
             # rdfsで0からラベル付けする
-            rdfs(s, label)
-            label += 1
+            rdfs(s, n_label)
+            n_label += 1
     # ラベルと各頂点のラベルのリストを返す
-    return label, group
+    return n_label, group
 
 
 # 縮約後のグラフを構築
-def construct(N, G, label, group):
+def construct(N, G, n_label, group):
     """
     縮約したノードのグラフを作る
     G0[i]: ラベルiと隣接するラベルのset
     GP[i]: ラベルiに含まれるノードのリスト
     """
-    G0 = [set() for _ in range(label)]
-    GP = [[] for _ in range(label)]
+    G0 = [set() for _ in range(n_label)]
+    GP = [[] for _ in range(n_label)]
     for v in range(N):
         lbs = group[v]
         for w in G[v]:
@@ -81,16 +84,18 @@ for _ in range(M):
     G[a - 1].append(b - 1)
     RG[b - 1].append(a - 1)
 
-# label: ラベル数, group: 各頂点のラベル番号のリスト)
-label, group = scc(N, G, RG)
+# n_label: ラベル数, group: 各頂点のラベル番号のリスト)
+n_label, group = scc(N, G, RG)
 
-# G0: labelと隣接するlabelの集合, GP: labelに含まれる点のリスト
-G0, GP = construct(N, G, label, group)
+# G0: n_labelと隣接するn_labelの集合, GP: n_labelに含まれる点のリスト
+# G0はトポロジカルソートされている
+G0, GP = construct(N, G, n_label, group)
+print(G0)
+print(GP)
 # この問題ではG0はつかわず、GP(あるラベルに含まれる点のリスト)だけつかう
 ans = 0
-for i in range(label):
+for i in range(n_label):
     if len(GP[i]) >= 2:
         # len(GP[i])から2つえらぶ
         ans += len(GP[i]) * (len(GP[i]) - 1) // 2
 print(ans)
-
